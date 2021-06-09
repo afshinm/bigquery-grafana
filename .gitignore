@@ -129,6 +129,7 @@ internal/
 !tests/cases/projects/NodeModulesSearch/**/*
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
+*.iml
 yarn.lock
 yarn-error.log
 .parallelperf.*
@@ -146,3 +147,5 @@ TEST-results.xml
 package-lock.json
 /todo.txt
 todo.txt
+
+

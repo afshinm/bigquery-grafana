@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
 
-module.exports = {
+const config = {
   node: {
     fs: 'empty',
   },
@@ -80,3 +80,8 @@ module.exports = {
     ],
   },
 };
+
+module.exports = {
+  getWebpackConfig: () => config,
+  ...config
+}
