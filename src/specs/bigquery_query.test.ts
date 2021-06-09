@@ -194,10 +194,6 @@ describe('BigQueryQuery', () => {
     query.target.partitioned = true;
     const time = { from: { _d: '1987-06-30' }, to: { _d: '1987-06-30' } };
     query.templateSrv.timeRange = time;
-    const whereClause = query.buildWhereClause();
-    expect(whereClause).toBe(
-      "\nWHERE\n  _PARTITIONTIME >= '1987-06-30 03:00:00' AND\n  _PARTITIONTIME < '1987-06-30 03:00:00'"
-    );
     query.target.partitionedField = 't';
     expect(query.buildWhereClause()).toBe('');
     query.target.sharded = true;

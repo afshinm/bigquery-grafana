@@ -5,7 +5,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import BigQueryQuery from './bigquery_query';
 import ResponseParser, { IResultFormat } from './response_parser';
-import superQueryLib from '@superquery/superquery-lib';
 import { v4 as generateID } from 'uuid';
 
 const Shifted = '_shifted';
@@ -47,9 +46,12 @@ export class BigQueryDatasource {
     return [strInterval, shift];
   }
 
-  public static _extractFromClause(sql: string) {
-    const superqueryLib = new superQueryLib();
-    return superqueryLib.getProjectDatasetTableFromSql(sql);
+  public static _extractFromClause(sql) {
+      let str = sql.replace(/\n/g, ' ');
+      const from = str.search(/from/i);
+      str = str.substring(from + 4).trim();
+      const last = str.search(' ');
+      return str.substring(1, last - 1);
   }
 
   public static _FindTimeField(sql, timeFields) {
@@ -259,8 +261,12 @@ export class BigQueryDatasource {
         });
       } else {
         // Fix raw sql
-        const sqlWithNoVariables = this.templateSrv.replace(tmpQ, options.scopedVars, this.interpolateVariable);
-        const [project, dataset, table] = BigQueryDatasource._extractFromClause(sqlWithNoVariables);
+        const from = BigQueryDatasource._extractFromClause(tmpQ);
+        const splitFrom = from.split('.');
+        const project = splitFrom[0];
+        const dataset = splitFrom[1];
+        const table = splitFrom[2];
+
         this.getDateFields(project, dataset, table)
           .then((dateFields) => {
             const tm = BigQueryDatasource._FindTimeField(tmpQ, dateFields);

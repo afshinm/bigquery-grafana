@@ -65,7 +65,7 @@ describe('BigQueryDatasource', () => {
     const sql = 'select a from `prj.ds.dt` where';
 
     const res = BigQueryDatasource._extractFromClause(sql);
-    expect(res).toEqual(['prj', 'ds', 'dt']);
+    expect(res).toBe('prj.ds.dt');
   });
 
   describe('_FindTimeField', () => {
